@@ -13,7 +13,8 @@ backend/data/
 *.lock.db
 
 # ---- Local environment overrides ----
-# .env.example is committed; anything with real values is not.
+# .env.example and .env.production are committed (the latter carries the
+# deployed backend's public URL); per-developer overrides are not.
 .env
 .env.local
 .env.*.local

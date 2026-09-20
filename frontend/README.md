@@ -23,8 +23,11 @@ CORS is configured on the backend. `src/api/config.ts` resolves the origin in th
 
 1. `window.__API_BASE__` — a commented-out `<script>` in `index.html`. Uncomment it to
    repoint a **built** `dist/index.html` at another backend with no rebuild.
-2. `VITE_API_BASE` — a build-time variable (`.env.local`, or the service's environment).
-   This is what the Render static site uses; see `.env.example`.
+2. `VITE_API_BASE` — a build-time variable. `.env.production` commits a default for
+   production builds (the deployed backend's URL), and a real environment variable
+   overrides it; `.env.local` is for per-developer overrides. See `.env.example`.
+   `npm run dev` is mode=development and does not read `.env.production`, and
+   `./build.sh frontend` sets `VITE_API_BASE` to the local backend explicitly.
 3. `http://<this host>:8080` — the default, which matches what `./build.sh up` starts.
 
 For the standard local setup you need to configure nothing.

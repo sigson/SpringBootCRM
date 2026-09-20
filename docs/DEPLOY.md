@@ -113,6 +113,10 @@ Environment variable: `VITE_API_BASE` = the backend service's URL
 (`https://springbootcrmbackend.onrender.com`). This is read at **build** time, so changing
 it later requires a redeploy of the static site, not just a restart.
 
+You can skip it: `frontend/.env.production` commits that same URL, and Vite loads it for
+any production build. Set the environment variable only to point a build somewhere else —
+a real variable takes precedence over the file.
+
 Add a rewrite rule under **Redirects/Rewrites**:
 
 | Source | Destination | Action |
