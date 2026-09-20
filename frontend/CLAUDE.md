@@ -68,9 +68,21 @@ Errors arrive as `ErrorEnvelope` with a `kind` (`VALIDATION`, `ACCESS_DENIED`,
 place; `useErrorDialog().showFromError(err)` is for the rest.
 
 `api/config.ts` resolves the backend origin: `window.__API_BASE__`, then `VITE_API_BASE`,
-then `http://<this host>:8080`. There is **no Vite proxy** — requests are cross-origin
-and CORS is configured on the backend. Do not add a proxy to "simplify" local
-development; it would diverge from how the app is actually deployed.
+then `<this host>:8080` (protocol taken from the page, never hardcoded `http:`). There is
+**no Vite proxy** — requests are cross-origin and CORS is configured on the backend. Do
+not add a proxy to "simplify" local development; it would diverge from how the app is
+actually deployed.
+
+**`config.ts` then writes the resolved value back to `window.__API_BASE__`, and that
+assignment is load-bearing.** The optional modules deliberately do not import host code,
+so each resolves its own origin by reading that global and nothing else
+(`modules/sqlworkbench/api/client.ts`, `modules/dcs/api.ts`). Remove the assignment and
+they silently fall back to same-origin: the requests go to the frontend's own host, and
+SQL Workbench shows no connections while the report designer shows no datasets — with no
+error, because a static host answers `/api/...` with `index.html`. This has already
+happened once, when the origin moved from a hardcoded line in `index.html` to
+`VITE_API_BASE`. `config.ts` is the single source of truth; the global is how the modules
+see it.
 
 ## Optional modules
 
