@@ -101,6 +101,12 @@ anyone could mint themselves an admin token with it.
 | Build command | `npm ci && npm run build` |
 | Publish directory | `dist` |
 
+`dist`, not `frontend/dist`: the publish path resolves *inside* the root directory.
+Getting this wrong is the most common way this service fails, and it fails late — the
+build succeeds, Vite reports the bundle it wrote, and only then Render says
+`Publish directory <name> does not exist!`. The build log's relative paths
+(`dist/index.html`) tell you what the publish directory is being compared against.
+
 Environment variable: `VITE_API_BASE` = the backend service's URL
 (`https://springbootcrm-api.onrender.com`). This is read at **build** time, so changing
 it later requires a redeploy of the static site, not just a restart.
@@ -113,6 +119,17 @@ Add a rewrite rule under **Redirects/Rewrites**:
 
 Without it, React Router works while navigating but any page reload or deep link returns
 404 from the static file server.
+
+### If you created the services by hand, render.yaml is not in play
+
+A service created through **New → Static Site** or **New → Web Service** takes its
+settings from the dashboard, and Render keeps preferring those on later syncs. It will
+not pick up `render.yaml` just because the file is in the repository — so a publish
+directory, a `VITE_API_BASE` or a rewrite rule that is correct in the blueprint can still
+be missing or wrong on the running service.
+
+Either set each field in the dashboard, as above, or delete the hand-made services and
+recreate them with **New → Blueprint**, which reads the file.
 
 ---
 
