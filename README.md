@@ -1,5 +1,18 @@
 # SpringBootCRM
 
+### ▶ [Try the live demo](https://springbootcrmfrontend.onrender.com)
+
+Sign in as **`admin`** / **`admin`** — the login screen fills it in for you.
+
+> **First load takes up to a minute.** The API runs on Render's free tier and sleeps
+> after 15 minutes idle, so the first request has to wake a JVM. The page itself appears
+> at once; it is the first API call that waits. Reload if it seems stuck.
+
+The demo database is shared and public — treat anything you type into it as visible to
+everyone, and expect it to be reset.
+
+---
+
 A CRM where the user interface is not written by hand. The backend declares what an
 aggregate *is*; the lists, forms, filters, navigation tree and permission checks that
 surround it are derived from that declaration at runtime, and the React client builds
