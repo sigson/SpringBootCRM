@@ -722,6 +722,28 @@ button.module-card { appearance: none; }
 .login-card h1 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
 .login-card p { margin: 0 0 16px; color: var(--text-muted); font-size: 12px; }
 
+/* Demo-credentials hint inside the login card. Lives here and not only on the
+   aside because .login-shell__aside is display:none below 880px. */
+.login-hint {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin: 0 0 16px; padding: 8px 10px;
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 12px; color: var(--text-muted);
+}
+.login-hint code {
+  font-size: 12px; color: var(--text);
+}
+.login-hint__fill {
+  flex: none;
+  background: none; border: none; padding: 0;
+  font: inherit; color: var(--accent-500);
+  cursor: pointer; text-decoration: underline;
+}
+.login-hint__fill:hover { color: var(--accent-700); }
+.login-hint__fill:focus-visible { outline: 2px solid var(--accent-500); outline-offset: 2px; }
+
 @media (max-width: 880px) {
   .login-shell { grid-template-columns: 1fr; }
   .login-shell__aside { display: none; }

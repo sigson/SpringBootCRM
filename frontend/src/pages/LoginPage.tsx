@@ -4,6 +4,13 @@ import { useAuth } from "../auth/AuthProvider";
 import { Alert, FormField, extractError } from "../components/Common";
 import { useFieldValidation, validators } from "../components/validation";
 
+// Обліковий запис, який бекенд створює на порожній базі (app.bootstrap.admin
+// в application.yml). Демо-стенд віддається публічно, тому підказка тут
+// навмисна — на реальному розгортанні пароль треба змінити після першого
+// входу, і тоді цей блок зі сторінки прибирають.
+const DEMO_USERNAME = "admin";
+const DEMO_PASSWORD = "admin";
+
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +31,18 @@ export function LoginPage() {
   const passwordRT = useFieldValidation(password, [validators.password(6, 200)]);
   const usernameError = touched.username ? usernameRT : null;
   const passwordError = touched.password ? passwordRT : null;
+
+  function fillDemoCredentials() {
+    setUsername(DEMO_USERNAME);
+    setPassword(DEMO_PASSWORD);
+    // Навмисно НЕ виставляємо touched. Пароль демо-акаунта коротший за мінімум
+    // із validators.password(6), тож підказка формату спрацювала б одразу на
+    // значення, яке ми самі щойно підставили. Вхід це не блокує: на цій формі
+    // валідація суто дорадча (див. коментар вище), кнопку вимикають лише
+    // порожні поля.
+    setTouched({});
+    setError(null);
+  }
 
   async function onSubmit() {
     setSubmitting(true);
@@ -64,6 +83,22 @@ export function LoginPage() {
         <div className="login-card">
           <h1>Sign in</h1>
           <p>Enter your username and password</p>
+
+          {/*
+            Дублює напис на лівій панелі навмисно: панель ховається на
+            ширині ≤880px, тож на телефоні вона єдина підказка, якої б не було.
+          */}
+          <div className="login-hint">
+            <span>
+              Demo — sign in as <code>{DEMO_USERNAME}</code> /{" "}
+              <code>{DEMO_PASSWORD}</code>
+            </span>
+            <button
+              type="button"
+              className="login-hint__fill"
+              onClick={fillDemoCredentials}
+            >Fill in</button>
+          </div>
 
           {error && <Alert kind="error">{error}</Alert>}
 
