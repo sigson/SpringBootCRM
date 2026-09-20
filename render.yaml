@@ -1,9 +1,14 @@
 # ---------------------------------------------------------------------------
 # Render Blueprint — the whole stack, on the free tier.
 #
-#   springbootcrm-api   Web Service (Docker)  the jar: REST API + Flyway
-#   springbootcrm-web   Static Site           the Vite build of frontend/
-#   springbootcrm-db    PostgreSQL            managed, free plan
+#   springbootcrmbackend    Web Service (Docker)  the jar: REST API + Flyway
+#   springbootcrmfrontend   Static Site           the Vite build of frontend/
+#   springbootcrm-db        PostgreSQL            managed, free plan
+#
+# The service names match the live deployment, so the onrender.com URLs below
+# are the real ones. Forking this? Rename all three — an onrender.com subdomain
+# is globally unique, so Render will suffix a name that is already taken, and
+# the CORS value further down has to match whatever you end up with.
 #
 # Deploy: push this repository to GitHub, then Render Dashboard ->
 # New -> Blueprint -> pick the repo. Render reads this file and creates all
@@ -25,7 +30,7 @@ databases:
 
 services:
   # ---------------------------------------------------------------- backend --
-  - name: springbootcrm-api
+  - name: springbootcrmbackend
     type: web
     runtime: docker
     plan: free
@@ -56,14 +61,16 @@ services:
       # must be allowed. SecurityConfig feeds this to setAllowedOriginPatterns,
       # so a comma-separated list and "*" wildcards both work.
       #
-      # NOT a `fromService` reference to springbootcrm-web: the static site
+      # NOT a `fromService` reference to springbootcrmfrontend: the static site
       # already references this service for VITE_API_BASE, and pointing back
-      # would make the two services mutually dependent. The URL is predictable
-      # instead — but if Render had to suffix the name (because someone already
-      # took springbootcrm-web), correct this value in the dashboard afterwards.
-      # The app reads it at startup, so it takes one restart, not a rebuild.
+      # would make the two services mutually dependent. Hence the literal URL.
+      #
+      # Get this wrong and the symptom is not a CORS message but a bare
+      # "failed to fetch" in the browser — the site loads, then every API call
+      # dies. The app reads it at startup, so fixing it is a restart, not a
+      # rebuild (unlike VITE_API_BASE, which is baked in at build time).
       - key: SPRINGBOOTCRM_CORS_ALLOWED_ORIGINS
-        value: https://springbootcrm-web.onrender.com
+        value: https://springbootcrmfrontend.onrender.com
 
       # The SQL Workbench is an admin-only read-only SQL console and the report
       # generator sits on top of it. Both are the point of the demo, so they are
@@ -74,7 +81,7 @@ services:
         value: "true"
 
   # --------------------------------------------------------------- frontend --
-  - name: springbootcrm-web
+  - name: springbootcrmfrontend
     type: web
     runtime: static
     rootDir: ./frontend
@@ -82,10 +89,10 @@ services:
     staticPublishPath: ./dist
     envVars:
       # Baked into the bundle at build time by src/api/config.ts. Render
-      # resolves this to https://springbootcrm-api.onrender.com.
+      # resolves this to https://springbootcrmbackend.onrender.com.
       - key: VITE_API_BASE
         fromService:
-          name: springbootcrm-api
+          name: springbootcrmbackend
           type: web
           property: url
     routes:

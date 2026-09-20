@@ -8,12 +8,12 @@ application][guide], with three deliberate departures noted at the end.
 The result is three services, all on free plans:
 
 ```
-  springbootcrm-web          springbootcrm-api           springbootcrm-db
-  Static Site                Web Service (Docker)        PostgreSQL
-  Vite build of frontend/    the jar, from backend/      managed, free plan
-  always on                  sleeps after 15 min idle    expires after 30 days
-        │                            │                          │
-        └──── HTTPS, CORS ───────────┴──── internal network ─────┘
+  springbootcrmfrontend       springbootcrmbackend        springbootcrm-db
+  Static Site                 Web Service (Docker)        PostgreSQL
+  Vite build of frontend/     the jar, from backend/      managed, free plan
+  always on                   sleeps after 15 min idle    expires after 30 days
+         │                             │                         │
+         └──── HTTPS, CORS ────────────┴──── internal network ────┘
 ```
 
 ---
@@ -34,15 +34,17 @@ you:
 
 - **Change the admin password** from the profile screen. `admin`/`admin` is created by
   the bootstrap on an empty database and your instance is on the public internet.
-- **Check `SPRINGBOOTCRM_CORS_ALLOWED_ORIGINS`** on `springbootcrm-api`. The blueprint
-  sets it to `https://springbootcrm-web.onrender.com`. If Render had to rename your
-  static site — because someone already took that name — the value is wrong and the
-  browser will block every API call with a CORS error. Correct it in the dashboard and
-  restart the service; it is read at startup, so no rebuild is needed.
+- **Check `SPRINGBOOTCRM_CORS_ALLOWED_ORIGINS`** on `springbootcrmbackend`. The blueprint
+  sets it to `https://springbootcrmfrontend.onrender.com`. An `onrender.com` subdomain is
+  globally unique, so if either name was taken Render suffixed it and this value is now
+  wrong. Correct it in the dashboard and restart; it is read at startup, so no rebuild.
 
-That second one is the single most likely thing to go wrong. Symptom: the site loads,
-the login form appears, and signing in fails with a network error while the browser
-console shows `No 'Access-Control-Allow-Origin' header`.
+That second one is the single most likely thing to go wrong, and its symptom is
+misleading: the site loads normally, then every API call fails with a bare
+**`Failed to fetch`**. A browser reports a blocked cross-origin request as a network
+error, so it looks like the backend is down. Check the console for
+`No 'Access-Control-Allow-Origin' header` before you go debugging the API — and confirm
+the backend really is awake, since a cold start looks much the same for the first minute.
 
 ---
 
@@ -108,7 +110,7 @@ build succeeds, Vite reports the bundle it wrote, and only then Render says
 (`dist/index.html`) tell you what the publish directory is being compared against.
 
 Environment variable: `VITE_API_BASE` = the backend service's URL
-(`https://springbootcrm-api.onrender.com`). This is read at **build** time, so changing
+(`https://springbootcrmbackend.onrender.com`). This is read at **build** time, so changing
 it later requires a redeploy of the static site, not just a restart.
 
 Add a rewrite rule under **Redirects/Rewrites**:
@@ -182,17 +184,17 @@ rebuild. Turn off auto-deploy in the service settings if you push often.
 
 ```bash
 # 1. the API is up (this is the request that pays the cold-start cost)
-curl -i https://springbootcrm-api.onrender.com/actuator/health
+curl -i https://springbootcrmbackend.onrender.com/actuator/health
 
 # 2. sign in
-curl -s -X POST https://springbootcrm-api.onrender.com/api/auth/login \
+curl -s -X POST https://springbootcrmbackend.onrender.com/api/auth/login \
      -H 'Content-Type: application/json' \
      -d '{"username":"admin","password":"admin"}'
 
 # 3. CORS is configured for the right origin — look for
 #    access-control-allow-origin in the response headers
-curl -i -X OPTIONS https://springbootcrm-api.onrender.com/api/customers \
-     -H 'Origin: https://springbootcrm-web.onrender.com' \
+curl -i -X OPTIONS https://springbootcrmbackend.onrender.com/api/customers \
+     -H 'Origin: https://springbootcrmfrontend.onrender.com' \
      -H 'Access-Control-Request-Method: GET'
 ```
 

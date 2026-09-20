@@ -7,7 +7,7 @@
  */
 interface ImportMetaEnv {
   /**
-   * Origin of the backend, e.g. "https://springbootcrm-api.onrender.com".
+   * Origin of the backend, e.g. "https://springbootcrmbackend.onrender.com".
    * Unset -> src/api/config.ts falls back to <this host>:8080 (dev default).
    * Set to "" -> same-origin requests, for when a proxy fronts both.
    */
