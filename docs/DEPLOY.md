@@ -124,7 +124,13 @@ Add a rewrite rule under **Redirects/Rewrites**:
 | `/*` | `/index.html` | Rewrite |
 
 Without it, React Router works while navigating but any page reload or deep link returns
-404 from the static file server.
+404 from the static file server: `index.html` is the only real file the SPA has, so
+`/login` matches nothing on disk and never reaches React.
+
+`/*` does not swallow the bundle — Render "does not apply redirect or rewrite rules to a
+path if a resource exists at that path", so `/assets/*` is served normally and only paths
+with no file behind them fall through. The action must be **Rewrite**; a Redirect would
+put `/index.html` in the address bar and lose the route.
 
 ### If you created the services by hand, render.yaml is not in play
 
