@@ -1,0 +1,14 @@
+# Keep the build context small and the image reproducible: everything the
+# Dockerfile needs is pom.xml + src/ + docker-entrypoint.sh.
+target/
+data/
+*.db
+*.trace.db
+*.lock.db
+.idea/
+*.iml
+*.log
+hs_err_pid*.log
+.git/
+.gitignore
+README.md

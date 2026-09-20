@@ -1,0 +1,462 @@
+/* ============================================================================
+   SQL Workbench — UI модуля.
+
+   РАНЕЕ модуль имел собственную «приборную» тёмную палитру (near-black + янтарь)
+   и собственные контролы, из-за чего в приложении сосуществовали два визуальных
+   стиля. ТЕПЕРЬ модуль использует те же design-токены и примитивы, что и host
+   (app.springbootcrm): --surface/--border/--accent-500, .btn/.data-table/.form-field/
+   .card/.alert/.subwindow. Никакого мультистиля — единый облик с приложением.
+
+   Селекторы по-прежнему ограничены префиксом .springbootcrm-root, чтобы layout-правила
+   модуля не протекали наружу, но ЦВЕТА и ПРИМИТИВЫ берутся из host-темы и
+   автоматически следуют светлой/тёмной теме приложения.
+   ============================================================================ */
+
+/* ---------- каркас модуля (фикс бага №1/№2: ничего не «вылезает» за экран,
+   контент заполняет всю площадь, переполнение скроллится ВНУТРИ области) ----- */
+.springbootcrm-root {
+  display: flex; flex-direction: column;
+  height: 100%; flex: 1;
+  min-width: 0; min-height: 0;          /* критично: позволяет flex-детям сжиматься,
+                                            а не растягивать окно (фикс бага №1) */
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;                      /* рамка модуля — единственная граница */
+  font-size: 13px;
+}
+.springbootcrm-root, .springbootcrm-root *, .springbootcrm-root *::before, .springbootcrm-root *::after { box-sizing: border-box; }
+.springbootcrm-root .mono { font-family: "Consolas", "Monaco", "Courier New", ui-monospace, monospace; }
+.springbootcrm-root .hint { color: var(--text-muted); font-size: 11px; }
+.springbootcrm-root .muted { color: var(--text-muted); }
+
+/* ---------- верхняя панель модуля ---------- */
+.springbootcrm-root .rdr-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 7px 12px;
+  background: linear-gradient(to bottom, #fafbfd, #eef2f8);
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+[data-theme="dark"] .springbootcrm-root .rdr-header {
+  background: linear-gradient(to bottom, var(--surface-2), var(--surface-3));
+}
+.springbootcrm-root .rdr-brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; letter-spacing: .04em; font-size: 13px; color: var(--text);
+  white-space: nowrap;
+}
+.springbootcrm-root .rdr-brand small { color: var(--text-muted); font-weight: 400; letter-spacing: 0; }
+.springbootcrm-root .rdr-brand__logo {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--accent-300), var(--accent-500), var(--accent-700), var(--accent-300));
+}
+.springbootcrm-root .rdr-ds-picker { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); }
+.springbootcrm-root .rdr-ds-picker label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+
+/* ---------- вкладки ---------- */
+.springbootcrm-root .rdr-tabs {
+  display: flex; gap: 2px; padding: 0 8px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  flex: none; overflow-x: auto;
+}
+.springbootcrm-root .rdr-tab {
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  color: var(--text-muted); padding: 8px 14px; cursor: pointer; font: inherit;
+  white-space: nowrap; border-radius: 0;
+}
+.springbootcrm-root .rdr-tab:hover { color: var(--text); background: var(--surface-hover); }
+.springbootcrm-root .rdr-tab.is-active { color: var(--accent-500); border-bottom-color: var(--accent-500); font-weight: 600; }
+
+/* ---------- основная область ---------- */
+.springbootcrm-root .rdr-main {
+  flex: 1; min-height: 0; min-width: 0;
+  overflow: auto;                        /* вертикальный скролл контента */
+  padding: 12px;
+  display: flex; flex-direction: column;
+}
+.springbootcrm-root .rdr-loading, .springbootcrm-root .rdr-empty {
+  color: var(--text-muted); padding: 28px; text-align: center; font-size: 13px; margin: auto;
+}
+
+/* панель, заполняющая всю доступную площадь (фикс бага №2) */
+.springbootcrm-root .rdr-panel {
+  display: flex; flex-direction: column; gap: 10px;
+  flex: 1; min-height: 0; min-width: 0;
+}
+
+/* ---------- общие inline-контролы под стиль host ---------- */
+.springbootcrm-root .rdr-input,
+.springbootcrm-root .rdr-select,
+.springbootcrm-root .rdr-textarea {
+  padding: 4px 8px; min-height: 26px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit; font-size: 12px;
+}
+.springbootcrm-root .rdr-input:focus,
+.springbootcrm-root .rdr-select:focus,
+.springbootcrm-root .rdr-textarea:focus { outline: none; border-color: var(--accent-500); box-shadow: 0 0 0 1px var(--accent-500); }
+.springbootcrm-root .rdr-input::placeholder { color: var(--text-faint); }
+.springbootcrm-root .rdr-input:disabled, .springbootcrm-root .rdr-select:disabled { opacity: .5; cursor: not-allowed; }
+
+.springbootcrm-root .rdr-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: none; }
+.springbootcrm-root .rdr-actions { display: inline-flex; gap: 6px; align-items: center; }
+.springbootcrm-root .rdr-spacer { flex: 1; }
+
+.springbootcrm-root .rdr-check {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text);
+  font-size: 12px; user-select: none;
+}
+.springbootcrm-root .rdr-check input { width: 15px; height: 15px; accent-color: var(--accent-500); cursor: pointer; }
+
+.springbootcrm-root .rdr-pager { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); }
+.springbootcrm-root .rdr-pager span { font-family: "Consolas", monospace; font-size: 12px; min-width: 64px; text-align: center; }
+
+.springbootcrm-root .rdr-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex: none; }
+.springbootcrm-root .rdr-detail-head h3 { margin: 0; font-size: 14px; font-weight: 700; }
+.springbootcrm-root .rdr-detail-head .hint { font-weight: 400; }
+
+.springbootcrm-root .op {
+  color: var(--accent-700); font-family: "Consolas", monospace; font-weight: 700;
+  padding: 0 4px; white-space: nowrap;
+}
+
+/* ---------- результат-грид: единый облик с host .data-table ---------- */
+.springbootcrm-root .rdr-grid-wrap {
+  flex: 1; min-height: 0; min-width: 0;
+  overflow: auto;                        /* широкая таблица скроллится ЗДЕСЬ, а не ломает окно */
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.springbootcrm-root .rdr-grid { width: 100%; border-collapse: collapse; font-size: 12px; }
+.springbootcrm-root .rdr-grid th, .springbootcrm-root .rdr-grid td {
+  padding: 4px 10px; text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+.springbootcrm-root .rdr-grid th:last-child, .springbootcrm-root .rdr-grid td:last-child { border-right: 0; }
+.springbootcrm-root .rdr-grid thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: linear-gradient(to bottom, #f0f3f8, #dee4ec);
+  color: var(--text); font-weight: 700; font-size: 11px;
+  border-bottom: 1px solid var(--border-strong); user-select: none;
+}
+[data-theme="dark"] .springbootcrm-root .rdr-grid thead th {
+  background: linear-gradient(to bottom, var(--surface-2), var(--surface-3));
+}
+.springbootcrm-root .rdr-grid tbody tr:hover td { background: var(--surface-hover); }
+.springbootcrm-root .rdr-grid .coltype {
+  display: block; font-size: 10px; color: var(--text-faint); font-weight: 400;
+  font-family: "Consolas", monospace;
+}
+.springbootcrm-root .rdr-grid .rownum {
+  color: var(--text-faint); text-align: right; font-family: "Consolas", monospace;
+  width: 1%; user-select: none; background: var(--surface-2);
+}
+.springbootcrm-root .rdr-grid td.null { color: var(--text-faint); font-style: italic; }
+.springbootcrm-root .rdr-grid .rdr-reflink {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  color: var(--accent-500); text-align: left; font: inherit;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.springbootcrm-root .rdr-grid .rdr-reflink:hover { color: var(--accent-600, var(--accent-500)); }
+.springbootcrm-root .rdr-grid .empty { text-align: center; color: var(--text-muted); padding: 18px; }
+.springbootcrm-root .rdr-grid tr.dirty td { background: color-mix(in srgb, var(--warning) 12%, transparent); }
+.springbootcrm-root .rdr-grid tr.draft td { background: color-mix(in srgb, var(--success) 12%, transparent); }
+.springbootcrm-root .rdr-grid input.cell {
+  width: 100%; min-width: 90px; background: transparent;
+  border: 1px solid transparent; border-radius: var(--radius-sm); padding: 2px 5px;
+  color: var(--text); font-family: "Consolas", monospace; font-size: 12px;
+}
+.springbootcrm-root .rdr-grid input.cell:hover { border-color: var(--border-strong); }
+.springbootcrm-root .rdr-grid input.cell:focus { border-color: var(--accent-500); background: var(--surface); outline: none; }
+.springbootcrm-root .rdr-grid-foot {
+  padding: 6px 10px; color: var(--text-muted); font-size: 11px;
+  border-top: 1px solid var(--border); background: var(--surface-2);
+  font-family: "Consolas", monospace; flex: none;
+}
+
+/* ---------- закрываемая панель результата (выезжает снизу) ---------- */
+.springbootcrm-root .rdr-result { gap: 6px; }
+.springbootcrm-root .rdr-result__bar {
+  display: flex; align-items: center; gap: 10px; flex: none;
+  padding: 4px 8px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.springbootcrm-root .rdr-result__title { font-size: 12px; font-weight: 700; color: var(--text); }
+
+/* предупреждение «связь не завершена» */
+.springbootcrm-root .tag.rdr-tag--warn {
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+/* ---------- поле выбора реквизита по ссылке (ссылочный режим) ------------- */
+/* Замена бесполезного «— поле —» в окнах связей/условий: выглядит как select,
+   но по клику открывает пикер реквизитов; показывает путь от источника. */
+.springbootcrm-root .rdr-reffield {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 8px; min-height: 26px; min-width: 160px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit; font-size: 12px;
+  cursor: pointer; text-align: left;
+  transition: border-color .12s ease, background .12s ease;
+}
+.springbootcrm-root .rdr-reffield:hover { border-color: var(--accent-500); background: var(--surface-2, var(--surface)); }
+.springbootcrm-root .rdr-reffield:focus-visible { outline: none; border-color: var(--accent-500); box-shadow: 0 0 0 1px var(--accent-500); }
+.springbootcrm-root .rdr-reffield.is-empty { color: var(--text-faint); border-style: dashed; }
+.springbootcrm-root .rdr-reffield__ico { flex: 0 0 auto; opacity: .8; font-size: 11px; }
+.springbootcrm-root .rdr-reffield__text {
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.springbootcrm-root .rdr-reffield__caret { flex: 0 0 auto; opacity: .55; font-size: 10px; }
+.springbootcrm-root .rdr-row .rdr-reffield.grow { flex: 1; min-width: 160px; }
+
+/* ---------- соединения (фикс бага №3: две равные половины, разделённые) ---- */
+.springbootcrm-root .rdr-cols-2 {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  align-items: start; flex: 1; min-height: 0;
+}
+@media (max-width: 900px) { .springbootcrm-root .rdr-cols-2 { grid-template-columns: 1fr; } }
+.springbootcrm-root .rdr-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; min-width: 0;
+  overflow: hidden;
+}
+.springbootcrm-root .rdr-card__head {
+  padding: 8px 12px; border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 12px; font-weight: 700; color: var(--text);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.springbootcrm-root .rdr-card__body { padding: 12px; overflow: auto; min-height: 0; }
+
+/* мини-форма ключ-значение */
+.springbootcrm-root .rdr-form { display: grid; grid-template-columns: 150px 1fr; gap: 9px 12px; align-items: center; }
+.springbootcrm-root .rdr-form > label { color: var(--text-muted); font-size: 12px; font-weight: 600; }
+.springbootcrm-root .rdr-form .rdr-input, .springbootcrm-root .rdr-form .rdr-select { width: 100%; }
+.springbootcrm-root .rdr-form__full { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 8px; }
+.springbootcrm-root .ok { color: var(--success); font-weight: 600; }
+.springbootcrm-root .off { color: var(--text-faint); }
+
+/* ---------- дерево/список таблиц (Обозреватель, палитра) ---------- */
+.springbootcrm-root .rdr-split { display: grid; grid-template-columns: 280px 1fr; gap: 14px; flex: 1; min-height: 0; align-items: stretch; }
+@media (max-width: 760px) { .springbootcrm-root .rdr-split { grid-template-columns: 1fr; } }
+.springbootcrm-root .rdr-tree {
+  display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden;
+}
+.springbootcrm-root .rdr-tree__head { padding: 8px; border-bottom: 1px solid var(--border); flex: none; }
+.springbootcrm-root .rdr-tree__head .rdr-input { width: 100%; }
+.springbootcrm-root .rdr-tree__list { list-style: none; margin: 0; padding: 4px; overflow: auto; min-height: 0; }
+.springbootcrm-root .rdr-tree__item {
+  padding: 5px 8px; border-radius: var(--radius-sm); cursor: pointer; color: var(--text);
+  white-space: nowrap; display: flex; align-items: center; gap: 6px;
+}
+.springbootcrm-root .rdr-tree__item:hover { background: var(--surface-hover); }
+.springbootcrm-root .rdr-tree__item.is-sel { background: color-mix(in srgb, var(--accent-500) 14%, var(--surface)); color: var(--accent-700); font-weight: 600; }
+.springbootcrm-root .rdr-tree__ico { color: var(--text-faint); width: 16px; text-align: center; }
+.springbootcrm-root .rdr-tree__cat { padding: 8px 8px 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint); }
+
+.springbootcrm-root .rdr-detail {
+  display: flex; flex-direction: column; gap: 10px; min-height: 0; min-width: 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px; overflow: auto;
+}
+.springbootcrm-root .rdr-detail h4 {
+  margin: 8px 0 4px; color: var(--text-muted); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+
+/* ---------- SQL-редактор (заполняет высоту — фикс бага №2) ---------- */
+.springbootcrm-root .rdr-sql-editor {
+  width: 100%; flex: 1; min-height: 120px; resize: none;
+  background: var(--surface-2); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); color: var(--text);
+  padding: 10px 12px; line-height: 1.5; font-size: 13px;
+  font-family: "Consolas", "Monaco", ui-monospace, monospace;
+  white-space: pre; overflow: auto; tab-size: 2;
+}
+.springbootcrm-root .rdr-sql-editor:focus { outline: none; border-color: var(--accent-500); box-shadow: 0 0 0 1px var(--accent-500); }
+
+/* предпросмотр SQL (read-only блок) */
+.springbootcrm-root .rdr-sql-preview {
+  margin: 0; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px;
+  color: var(--text); font-family: "Consolas", "Monaco", ui-monospace, monospace;
+  font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  max-height: 220px; overflow: auto;
+}
+
+/* ---------- конструктор запросов (1С-подобный) ---------- */
+.springbootcrm-root .rdr-builder { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; min-width: 0; }
+.springbootcrm-root .rdr-wizard-tabs {
+  display: flex; gap: 2px; border-bottom: 1px solid var(--border); flex: none; flex-wrap: wrap;
+}
+.springbootcrm-root .rdr-wizard-tab {
+  background: var(--surface-2); border: 1px solid var(--border); border-bottom: none;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  color: var(--text-muted); padding: 6px 12px; cursor: pointer; font: inherit; font-size: 12px;
+  margin-bottom: -1px;
+}
+.springbootcrm-root .rdr-wizard-tab:hover { color: var(--text); }
+.springbootcrm-root .rdr-wizard-tab.is-active {
+  background: var(--surface); color: var(--accent-700); font-weight: 700;
+  border-color: var(--border); border-bottom: 1px solid var(--surface);
+}
+.springbootcrm-root .rdr-wizard-body {
+  flex: 1; min-height: 0; min-width: 0; overflow: auto;
+  border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--surface); padding: 12px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* три панели «Таблицы и поля» */
+.springbootcrm-root .rdr-tf {
+  display: grid; grid-template-columns: minmax(180px, 1fr) minmax(200px, 1fr) minmax(240px, 1.3fr);
+  gap: 12px; flex: 1; min-height: 0;
+}
+@media (max-width: 940px) { .springbootcrm-root .rdr-tf { grid-template-columns: 1fr; } }
+.springbootcrm-root .rdr-pane {
+  display: flex; flex-direction: column; min-height: 180px; min-width: 0;
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); overflow: hidden;
+}
+.springbootcrm-root .rdr-pane__head {
+  padding: 6px 10px; border-bottom: 1px solid var(--border); background: var(--surface-3);
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: none;
+}
+.springbootcrm-root .rdr-pane__body { padding: 6px; overflow: auto; min-height: 0; display: flex; flex-direction: column; gap: 3px; }
+
+.springbootcrm-root .rdr-pick {
+  padding: 5px 8px; border-radius: var(--radius-sm); cursor: pointer; color: var(--text);
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.springbootcrm-root .rdr-pick:hover { background: var(--surface-hover); }
+.springbootcrm-root .rdr-pick.is-sel { background: color-mix(in srgb, var(--accent-500) 14%, var(--surface)); color: var(--accent-700); }
+.springbootcrm-root .rdr-pick__ico { color: var(--accent-500); font-weight: 700; width: 14px; text-align: center; }
+
+/* строка выбранного источника/поля */
+.springbootcrm-root .rdr-item {
+  display: flex; align-items: center; gap: 8px; padding: 5px 8px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+}
+.springbootcrm-root .rdr-item__main { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.springbootcrm-root .rdr-item__main b { font-family: "Consolas", monospace; color: var(--text); }
+.springbootcrm-root .rdr-item .rdr-select, .springbootcrm-root .rdr-item .rdr-input { min-width: 0; }
+
+/* строки-конструкторы (связи/условия/порядок) */
+.springbootcrm-root .rdr-rows { display: flex; flex-direction: column; gap: 6px; }
+.springbootcrm-root .rdr-row {
+  display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+  padding: 7px 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+}
+.springbootcrm-root .rdr-row.is-disabled { opacity: .5; }
+.springbootcrm-root .rdr-row .rdr-input { min-width: 130px; }
+.springbootcrm-root .rdr-row .grow { flex: 1; min-width: 140px; }
+
+.springbootcrm-root .rdr-fieldset { display: flex; flex-direction: column; gap: 8px; }
+.springbootcrm-root .rdr-fieldset__title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-muted); display: flex; align-items: center; gap: 12px;
+}
+.springbootcrm-root .rdr-note {
+  font-size: 11px; color: var(--text-muted);
+  background: color-mix(in srgb, var(--info) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--info) 30%, transparent);
+  border-radius: var(--radius-sm); padding: 6px 10px;
+}
+
+/* строка ошибки модуля — через host .alert (.alert--error). тут только отступ */
+.springbootcrm-root .rdr-alert { margin: 0; flex: none; }
+
+/* тост */
+.springbootcrm-root .rdr-toast {
+  position: fixed; bottom: 18px; right: 18px; z-index: 50;
+  background: var(--surface); border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--success);
+  padding: 10px 14px; border-radius: var(--radius); box-shadow: var(--shadow-md); font-size: 12px; color: var(--text);
+}
+
+/* ============================================================================
+   Конструктор: пакеты запросов и объединения (вертикальные «гребешки» справа),
+   вложенные запросы (модально), область оператора пакета.
+   ============================================================================ */
+
+/* область оператора: [редактор] [объединения‖] [пакеты‖] */
+.springbootcrm-root .rdr-stmt-area { display: flex; flex-direction: row; flex: 1; min-height: 0; min-width: 0; gap: 0; }
+.springbootcrm-root .rdr-stmt-main { flex: 1; min-width: 0; min-height: 0; display: flex; }
+
+/* один оператор (StatementEditor): [редактор] [объединения‖] */
+.springbootcrm-root .rdr-stmt { display: flex; flex-direction: row; flex: 1; min-width: 0; min-height: 0; }
+.springbootcrm-root .rdr-stmt__editor { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* строка роли участника объединения */
+.springbootcrm-root .rdr-union-bar {
+  display: flex; align-items: center; gap: 12px; flex: none;
+  padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent-500) 7%, var(--surface-2));
+}
+
+/* вертикальная панель «гребешков» */
+.springbootcrm-root .rdr-comb {
+  flex: none; display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+  padding: 6px 4px; min-width: 38px; max-width: 46px; overflow-y: auto; overflow-x: hidden;
+  border-left: 1px solid var(--border); background: var(--surface-2);
+}
+.springbootcrm-root .rdr-comb--package { background: var(--surface-3); border-left-color: var(--border-strong); }
+.springbootcrm-root .rdr-comb__title {
+  writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-faint); align-self: center; padding: 4px 0; white-space: nowrap;
+}
+.springbootcrm-root .rdr-comb__tabwrap { display: flex; flex-direction: column; align-items: stretch; gap: 2px; }
+.springbootcrm-root .rdr-comb__tab {
+  writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+  background: var(--surface); color: var(--text-muted);
+  border: 1px solid var(--border); border-right: none;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  padding: 8px 5px; cursor: pointer; font: inherit; font-size: 12px;
+  max-height: 220px; min-height: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  align-self: stretch;
+}
+.springbootcrm-root .rdr-comb__tab:hover { color: var(--text); background: var(--surface-hover); }
+.springbootcrm-root .rdr-comb__tab.is-active {
+  background: var(--accent-500); color: var(--accent-text); border-color: var(--accent-700); font-weight: 700;
+}
+.springbootcrm-root .rdr-comb__del {
+  border: 1px solid var(--border); background: var(--surface); color: var(--danger);
+  border-radius: var(--radius-sm); cursor: pointer; font-size: 11px; padding: 2px 0; align-self: center; width: 22px;
+}
+.springbootcrm-root .rdr-comb__del:hover { border-color: var(--danger); }
+.springbootcrm-root .rdr-comb__add {
+  margin-top: 2px; border: 1px dashed var(--border-strong); background: transparent; color: var(--text-muted);
+  border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; padding: 4px 0; align-self: stretch;
+}
+.springbootcrm-root .rdr-comb__add:hover { color: var(--accent-500); border-color: var(--accent-500); }
+
+/* file-input как кнопка внутри тулбара модалки */
+.springbootcrm-root .rdr-toolbar label.btn { cursor: pointer; }
+
+/* переключатель режима оператора: Конструктор / Объединение-Псевдонимы */
+.springbootcrm-root .rdr-stmt-tabs { display: flex; gap: 4px; flex: none; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.springbootcrm-root .rdr-stmt-tab {
+  background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 5px 12px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600;
+}
+.springbootcrm-root .rdr-stmt-tab:hover { color: var(--text); }
+.springbootcrm-root .rdr-stmt-tab.is-active { background: var(--accent-500); color: var(--accent-text); border-color: var(--accent-700); }

@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:springbootcrm-test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    clean-disabled: false
+
+app:
+  auth:
+    jwt:
+      secret: VGVzdC1zZWNyZXQta2V5LWZvci10ZXN0LXByb2ZpbGUtb25seS1ub3QtZm9yLXByb2QtdXNlLWV2ZXIhISExMTE=
+      ttl-seconds: 3600
+
+sqlworkbench:
+  enabled: false
+
+logging:
+  level:
+    root: WARN
+    app.springbootcrm: INFO
+    domain.core: INFO

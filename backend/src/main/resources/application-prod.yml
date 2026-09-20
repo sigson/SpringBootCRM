@@ -1,0 +1,38 @@
+# Production profile: activated with SPRING_PROFILES_ACTIVE=prod (render.yaml sets it).
+#
+# Only the things that must differ from the development defaults in
+# application.yml live here. Everything else is inherited.
+
+spring:
+  # The H2 web console is a full SQL shell on the live database and is permitted
+  # anonymously by SecurityConfig (/h2/**). Harmless on a developer's laptop,
+  # unacceptable on a public URL.
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    properties:
+      # Formatting SQL costs CPU and only helps when you are reading the log.
+      hibernate.format_sql: false
+
+app:
+  auth:
+    jwt:
+      # The frontend is served from a different origin than the API (a Render
+      # Static Site talking to a Render Web Service), so the auth cookie is a
+      # third-party cookie: browsers drop it unless it is SameSite=None; Secure.
+      # The client also sends the token as a Bearer header, so sign-in still
+      # works if the browser refuses the cookie entirely.
+      cookie-secure: ${SPRINGBOOTCRM_AUTH_COOKIE_SECURE:true}
+      cookie-same-site: ${SPRINGBOOTCRM_AUTH_COOKIE_SAME_SITE:None}
+
+logging:
+  level:
+    root: INFO
+    app.springbootcrm: INFO
+    app.modules.sqlworkbench: WARN
+    app.modules.dcs: WARN
+    domain.core: WARN
+    org.hibernate.SQL: WARN
+    org.flywaydb: INFO

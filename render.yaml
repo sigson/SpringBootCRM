@@ -1,0 +1,102 @@
+# ---------------------------------------------------------------------------
+# Render Blueprint — the whole stack, on the free tier.
+#
+#   springbootcrm-api   Web Service (Docker)  the jar: REST API + Flyway
+#   springbootcrm-web   Static Site           the Vite build of frontend/
+#   springbootcrm-db    PostgreSQL            managed, free plan
+#
+# Deploy: push this repository to GitHub, then Render Dashboard ->
+# New -> Blueprint -> pick the repo. Render reads this file and creates all
+# three. See docs/DEPLOY.md for the walkthrough and the free-tier caveats.
+#
+# Two services rather than one because a Render Static Site is free AND never
+# spins down, so the UI stays instant even while the API is cold. The cost is
+# cross-origin requests, which is why CORS_ALLOWED_ORIGINS and the SameSite=None
+# cookie (application-prod.yml) are wired up below.
+# ---------------------------------------------------------------------------
+
+databases:
+  - name: springbootcrm-db
+    databaseName: springbootcrm
+    user: springbootcrm
+    plan: free
+    # Free Postgres on Render expires 30 days after creation and is then
+    # deleted. Fine for a demo; see docs/DEPLOY.md before relying on it.
+
+services:
+  # ---------------------------------------------------------------- backend --
+  - name: springbootcrm-api
+    type: web
+    runtime: docker
+    plan: free
+    region: frankfurt          # keep the DB in the same region or latency hurts
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    # Actuator's health endpoint is permitted anonymously in SecurityConfig.
+    # Render polls it to decide when a deploy is live.
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+      # One connection string; backend/docker-entrypoint.sh splits it into the
+      # jdbc: URL, user and password that the driver needs.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: springbootcrm-db
+          property: connectionString
+
+      # HMAC key for signing JWTs. generateValue makes Render mint a random
+      # 256-bit value on first deploy and keep it — the development default
+      # in application.yml is public knowledge and must not reach production.
+      - key: SPRINGBOOTCRM_JWT_SECRET
+        generateValue: true
+
+      # The browser calls the API from the static site's origin, so that origin
+      # must be allowed. SecurityConfig feeds this to setAllowedOriginPatterns,
+      # so a comma-separated list and "*" wildcards both work.
+      #
+      # NOT a `fromService` reference to springbootcrm-web: the static site
+      # already references this service for VITE_API_BASE, and pointing back
+      # would make the two services mutually dependent. The URL is predictable
+      # instead — but if Render had to suffix the name (because someone already
+      # took springbootcrm-web), correct this value in the dashboard afterwards.
+      # The app reads it at startup, so it takes one restart, not a rebuild.
+      - key: SPRINGBOOTCRM_CORS_ALLOWED_ORIGINS
+        value: https://springbootcrm-web.onrender.com
+
+      # The SQL Workbench is an admin-only read-only SQL console and the report
+      # generator sits on top of it. Both are the point of the demo, so they are
+      # on — set either to false to strip the module (no beans, no UI section).
+      - key: SQLWORKBENCH_ENABLED
+        value: "true"
+      - key: DCS_ENABLED
+        value: "true"
+
+  # --------------------------------------------------------------- frontend --
+  - name: springbootcrm-web
+    type: web
+    runtime: static
+    rootDir: ./frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # Baked into the bundle at build time by src/api/config.ts. Render
+      # resolves this to https://springbootcrm-api.onrender.com.
+      - key: VITE_API_BASE
+        fromService:
+          name: springbootcrm-api
+          type: web
+          property: url
+    routes:
+      # React Router owns the URL space. Without this, reloading /customers or
+      # deep-linking any route returns 404 from the static file server.
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        # Vite fingerprints asset filenames, so they are safe to cache forever.
+        # index.html is deliberately excluded and stays revalidated.
+        value: public, max-age=31536000, immutable

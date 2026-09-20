@@ -1,0 +1,46 @@
+# Build and test both halves on every push and pull request.
+#
+# The Render deploy does NOT run tests — backend/Dockerfile skips them, because
+# an image build is a deploy step and not the place to discover a red suite.
+# This workflow is that gate.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend (Java 21)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      # verify, not test: the integration suite (*IT) runs under failsafe, which
+      # is bound to integration-test/verify. `mvn test` would silently skip it.
+      - name: Build and test
+        working-directory: backend
+        run: mvn -B -ntp verify
+
+  frontend:
+    name: Frontend (Node 20)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      # `npm run build` is `tsc && vite build`, so this typechecks too.
+      - name: Typecheck and build
+        working-directory: frontend
+        run: npm run build

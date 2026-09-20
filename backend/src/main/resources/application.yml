@@ -1,0 +1,115 @@
+spring:
+  application:
+    name: springbootcrm-backend
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:file:./data/springbootcrm;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;RETENTION_TIME=0}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      jakarta.persistence.validation.mode: none
+      hibernate.format_sql: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.globally_quoted_identifiers: false
+      hibernate.jdbc.batch_size: 500
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.jdbc.batch_versioned_data: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    out-of-order: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+server:
+  # PORT is what PaaS providers (Render, Heroku, Fly) inject; SERVER_PORT is the
+  # local override used by tools/start/backend.sh. Neither set -> 8080.
+  port: ${PORT:${SERVER_PORT:8080}}
+  forward-headers-strategy: framework
+  compression:
+    enabled: true
+    mime-types: application/json,text/html,text/css,application/javascript
+    min-response-size: 1024
+
+# ----------- Domain-core configuration -----------
+app:
+  ddd:
+    bootstrap:
+      scan-packages:
+        - domain
+        - app
+    access:
+      strict-default: true
+      implicit-post-load-check: true
+    refprefetch:
+      default-depth: 3
+
+  # ----------- Authentication -----------
+  auth:
+    jwt:
+      secret: ${SPRINGBOOTCRM_JWT_SECRET:VGhpcy1pcy1hLWRldmVsb3BtZW50LXNlY3JldC1rZXktUkVQTEFDRS1NRS1pbi1wcm9kdWN0aW9uLW9yLWVsc2UtcmlzayE=}
+      issuer: springbootcrm
+      # 8 hours
+      ttl-seconds: 28800
+      cookie-name: springbootcrm_token
+      cookie-secure: ${SPRINGBOOTCRM_AUTH_COOKIE_SECURE:false}
+      cookie-same-site: Lax
+
+  # ----------- Admin bootstrap -----------
+  bootstrap:
+    admin:
+      username: admin
+      password: admin
+      email: admin@springbootcrm.local
+
+springbootcrm:
+  cors:
+    allowed-origins: ${SPRINGBOOTCRM_CORS_ALLOWED_ORIGINS:*}
+
+# ----------- Optional "SQL Workbench" module (app.modules.sqlworkbench) -----------
+sqlworkbench:
+  # false disables the module entirely (no bean is created, the section disappears).
+  enabled: ${SQLWORKBENCH_ENABLED:true}
+  base-path: /api/sqlworkbench
+  # Auto-register the host's main database as the read-only "main" data source.
+  register-host-datasource: true
+  host-datasource-id: main
+  host-datasource-name: "SpringBootCRM (main database, read-only)"
+
+# ----------- Optional "Data composition" module (app.modules.dcs) -----------
+# The report generator (a 1C DCS analogue). Requires the SQL Workbench module: the
+# datasets of a report are a query pack, assembled and executed by the Workbench.
+dcs:
+  enabled: ${DCS_ENABLED:true}
+  base-path: /api/dcs
+  # Source-record cap per composition; a report may lower it in its output parameters.
+  max-rows: 100000
+  # Workbench data source used when a report does not name one.
+  default-data-source-id: main
+
+logging:
+  level:
+    root: INFO
+    # WARN on the key domain.core listeners prints the reasons for access denials;
+    domain.core.access: WARN
+    domain.core.persistence: WARN
+    domain.core: INFO
+    app.springbootcrm: DEBUG
+    app.modules.sqlworkbench: INFO
+    app.modules.dcs: INFO
+    org.hibernate.SQL: WARN
+    org.springframework.security: WARN
+    org.springframework.transaction: WARN
+    org.flywaydb: INFO

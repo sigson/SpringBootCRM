@@ -1,0 +1,1737 @@
+/* ============================================================================
+   SpringBootCRM — design tokens (light theme matching 1C aesthetic by default)
+   ============================================================================ */
+
+:root[data-theme="light"], :root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --surface-2: #f4f6fa;
+  --surface-3: #e8ecf2;
+  --surface-hover: #eef2f8;
+  --border: #cdd3dc;
+  --border-strong: #b5bbc7;
+
+  --text: #1a1f2b;
+  --text-muted: #5a6372;
+  --text-faint: #8a93a3;
+
+  --accent-300: #6b9fff;
+  --accent-500: #2563eb;
+  --accent-700: #1d4ed8;
+  --accent-text: #ffffff;
+
+  --danger: #d33a3a;
+  --warning: #d97a09;
+  --success: #1f8c45;
+  --info: #0e7490;
+
+  --radius: 4px;
+  --radius-sm: 3px;
+  --radius-pill: 20px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.08);
+  --shadow-md: 0 6px 16px rgba(0,0,0,.10);
+  --shadow-lg: 0 24px 56px rgba(0,0,0,.22);
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #161922;
+  --surface: #1d212c;
+  --surface-2: #252a37;
+  --surface-3: #2e3445;
+  --surface-hover: #2a2f3d;
+  --border: #353c4f;
+  --border-strong: #4a536b;
+
+  --text: #e8ecf3;
+  --text-muted: #9ba4b5;
+  --text-faint: #6d7587;
+
+  --accent-300: #7eb3ff;
+  --accent-500: #3d7cf4;
+  --accent-700: #1e4cb0;
+  --accent-text: #ffffff;
+
+  --danger: #ef5050;
+  --warning: #f4a93d;
+  --success: #4ade80;
+  --info: #38bdf8;
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", "Tahoma", "Manrope", system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-500); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button { font-family: inherit; cursor: pointer; }
+
+code, .mono {
+  font-family: "Consolas", "Monaco", "Courier New", ui-monospace, monospace;
+  font-size: 12px;
+}
+
+/* ============================================================================ */
+/* Top navigation */
+/* ============================================================================ */
+.topnav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 16px;
+  background: linear-gradient(to bottom, #fafbfd, #eef2f8);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+  height: 44px;
+}
+[data-theme="dark"] .topnav {
+  background: linear-gradient(to bottom, var(--surface), var(--surface-2));
+}
+.topnav__left, .topnav__right {
+  display: flex; align-items: center; gap: 10px;
+}
+.brand-mark {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; letter-spacing: .02em; font-size: 14px;
+  color: var(--text);
+}
+.brand-mark__logo {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--accent-300), var(--accent-500), var(--accent-700), var(--accent-300));
+}
+.env-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: 3px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 10px; font-weight: 700; letter-spacing: .04em;
+}
+.icon-btn {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .12s, border-color .12s;
+  padding: 0;
+}
+.icon-btn:hover { background: var(--surface-hover); border-color: var(--border-strong); }
+.icon-btn--small { width: 22px; height: 22px; font-size: 11px; }
+.avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-300), var(--accent-700));
+  color: white; display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px;
+}
+
+/* ============================================================================ */
+/* Page layout */
+/* ============================================================================ */
+.page {
+  padding: 16px 20px 40px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.page__head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 14px; gap: 18px; flex-wrap: wrap;
+}
+.page__title-block h1 {
+  margin: 0 0 3px; font-size: 17px; font-weight: 700; color: var(--text);
+}
+.page__title-block p {
+  margin: 0; color: var(--text-muted); font-size: 12px;
+}
+.section-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-muted); font-weight: 700;
+  margin: 14px 0 8px;
+}
+
+/* ============================================================================ */
+/* Buttons (1C-like compact) */
+/* ============================================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 5px 12px;
+  background: linear-gradient(to bottom, #fafbfd, #e8edf3);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-weight: 500; font-size: 12px;
+  transition: background .1s, border-color .1s;
+  min-height: 26px;
+}
+[data-theme="dark"] .btn {
+  background: linear-gradient(to bottom, var(--surface-2), var(--surface-3));
+}
+.btn:hover {
+  background: linear-gradient(to bottom, #f4f6fa, #dfe4ec);
+  border-color: var(--accent-500);
+}
+[data-theme="dark"] .btn:hover {
+  background: linear-gradient(to bottom, var(--surface-3), var(--surface-hover));
+}
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn--primary {
+  background: linear-gradient(to bottom, #5b94f2, var(--accent-500));
+  color: var(--accent-text);
+  border-color: var(--accent-700);
+  font-weight: 600;
+}
+.btn--primary:hover {
+  background: linear-gradient(to bottom, var(--accent-500), var(--accent-700));
+  border-color: var(--accent-700);
+}
+.btn--danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 50%, var(--border-strong)); }
+.btn--danger:hover { background: color-mix(in srgb, var(--danger) 10%, transparent); border-color: var(--danger); }
+.btn--small { padding: 3px 8px; font-size: 11px; min-height: 22px; }
+
+/* ============================================================================ */
+/* Cards & dashboard */
+/* ============================================================================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.module-card {
+  display: flex; flex-direction: column; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-decoration: none;
+  color: var(--text);
+  min-height: 110px;
+  transition: border-color .12s, background .12s, transform .08s;
+}
+.module-card:hover {
+  border-color: var(--accent-500);
+  background: var(--surface-hover);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.module-card__title { font-size: 13px; font-weight: 700; }
+.module-card__desc { color: var(--text-muted); font-size: 11px; flex: 1; }
+.module-card__icon {
+  width: 28px; height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  color: var(--accent-500);
+  font-size: 16px;
+}
+/* ---- Дашборд: групові плитки + хлібні крихти занурення ---- */
+.module-card {
+  /* Кнопка-плитка (GROUP) має виглядати ідентично плитці-посиланню. */
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+button.module-card { appearance: none; }
+.module-card--group {
+  border-style: dashed;
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+}
+.module-card--group .module-card__icon {
+  background: color-mix(in srgb, var(--accent-500) 14%, var(--surface));
+}
+.module-card__cta {
+  margin-top: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-500);
+}
+.dash-crumbs {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
+  margin: 0 0 12px;
+  font-size: 12px;
+}
+.dash-crumb {
+  display: inline-flex; align-items: center; gap: 4px;
+  border: 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: 12px;
+  color: var(--accent-500);
+  padding: 2px 4px; border-radius: var(--radius-sm);
+}
+.dash-crumb:hover { background: var(--surface-hover); }
+.dash-crumb--current { color: var(--text); font-weight: 600; cursor: default; }
+.dash-crumb--current:hover { background: transparent; }
+.dash-crumb__seg { display: inline-flex; align-items: center; gap: 4px; }
+.dash-crumb__sep { color: var(--text-muted); }
+.tag--soft {
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+/* ============================================================================ */
+/* Data table — 1C-style */
+/* ============================================================================ */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+.data-table th, .data-table td {
+  padding: 4px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table th:last-child, .data-table td:last-child { border-right: 0; }
+/* Трейлінг-«прогалина»: порожня нерозтяжна колонка праворуч. Не має маркера
+   зміни ширини; існує лише щоб правий край останньої змістовної колонки (та її
+   маркер col-resize) не впирався у смугу прокрутки. */
+.data-table__gutter {
+  padding: 0 !important;
+  border-right: 0 !important;
+  background: var(--surface);
+}
+.data-table--fixed .data-table__gutter { overflow: visible; }
+.data-table th {
+  background: linear-gradient(to bottom, #f0f3f8, #dee4ec);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 11px;
+  border-bottom: 1px solid var(--border-strong);
+  white-space: nowrap;
+  user-select: none;
+  /* Якір для абсолютно-позиціонованого маркера зміни ширини (.data-table__resizer). */
+  position: relative;
+}
+/* Fixed-layout режим (вмикається ListView'ом після виміру ширин): кожна колонка
+   має явну ширину, ширина таблиці = сумі колонок, тож зміна однієї колонки не
+   перерозподіляє решту, а таблиця при потребі скролиться горизонтально. */
+.data-table--fixed { table-layout: fixed; width: auto; }
+.data-table--fixed th,
+.data-table--fixed td {
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-theme="dark"] .data-table th {
+  background: linear-gradient(to bottom, var(--surface-2), var(--surface-3));
+}
+.data-table tr:last-child td { border-bottom: 0; }
+.data-table tbody tr:hover td { background: var(--surface-hover); }
+.data-table .row-actions { display: flex; gap: 4px; justify-content: flex-end; }
+.data-table__th--sortable { cursor: pointer; }
+.data-table__th--sortable:hover { background: linear-gradient(to bottom, #e8edf5, #d3dae5); }
+[data-theme="dark"] .data-table__th--sortable:hover {
+  background: linear-gradient(to bottom, var(--surface-3), var(--surface-hover));
+}
+.data-table__th-content { display: inline-flex; align-items: center; gap: 4px; }
+/* Маркер межі для розтягування ширини колонки. */
+.data-table__resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 9px;
+  height: 100%;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  z-index: 3;
+}
+.data-table__resizer:hover {
+  background: linear-gradient(to right, transparent, var(--accent-500));
+  opacity: 0.5;
+}
+.data-table__sort-mark { font-size: 9px; color: var(--accent-500); }
+.data-table__row--selected td {
+  background: color-mix(in srgb, var(--accent-500) 12%, var(--surface)) !important;
+}
+.data-table__filter-row th {
+  background: var(--surface);
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--border-strong);
+}
+.data-table__col-filter {
+  width: 100%;
+  padding: 2px 6px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  border-radius: 2px;
+  font-family: inherit;
+  color: var(--text);
+}
+.data-table__col-filter:focus { outline: 1px solid var(--accent-500); border-color: var(--accent-500); }
+
+/* ============================================================================ */
+/* ListView */
+/* ============================================================================ */
+.listview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.listview__toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 10px;
+  background: linear-gradient(to bottom, #fafbfd, #f0f3f8);
+  border-bottom: 1px solid var(--border);
+  min-height: 40px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+[data-theme="dark"] .listview__toolbar {
+  background: linear-gradient(to bottom, var(--surface), var(--surface-2));
+}
+.listview__toolbar-left, .listview__toolbar-right {
+  display: flex; align-items: center; gap: 6px;
+}
+.listview__search-wrap {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  min-width: 240px;
+}
+.listview__search {
+  border: 0; outline: 0; background: transparent;
+  font-family: inherit; font-size: 12px;
+  flex: 1;
+  color: var(--text);
+}
+.listview__count { font-size: 11px; padding-left: 6px; }
+.listview__table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 240px);
+  /* Завжди резервуємо місце під вертикальну смугу прокрутки, щоб поява скролу
+     (коли рядки не влазять по висоті) НЕ зменшувала ширину контенту й не
+     породжувала зайвий горизонтальний скрол: ширина області однакова в обох
+     станах. На платформах з overlay-скролом резерв = 0 (проблеми там немає). */
+  scrollbar-gutter: stable;
+}
+.listview__status {
+  padding: 4px 10px;
+  font-size: 11px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+}
+.listview__footer {
+  padding: 6px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+/* ============================================================================ */
+/* Form fields */
+/* ============================================================================ */
+.form-grid { display: grid; gap: 10px; }
+.form-grid--cols-2 { grid-template-columns: 1fr 1fr; }
+.form-field { display: flex; flex-direction: column; gap: 3px; }
+.form-field--checkbox { gap: 2px; }
+.form-field__label { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+.form-field__label--inline { display: inline; font-weight: 500; color: var(--text); }
+.form-field__input, .form-field__textarea, .form-field__select {
+  width: 100%;
+  padding: 4px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit; font-size: 12px;
+  min-height: 24px;
+}
+.form-field__input:focus, .form-field__textarea:focus, .form-field__select:focus {
+  outline: none; border-color: var(--accent-500);
+  box-shadow: 0 0 0 1px var(--accent-500);
+}
+.form-field__textarea { min-height: 60px; resize: vertical; }
+.form-field__input[readonly], .form-field__textarea[readonly] {
+  background: var(--surface-2); cursor: not-allowed;
+}
+.form-field__error { font-size: 11px; color: var(--danger); }
+.form-field__hint { font-size: 11px; color: var(--text-muted); }
+
+/* Контейнер елемента вводу — anchor для оверлей-панелі валідації. */
+.form-field__control { position: relative; display: block; }
+
+/* Підсвічення невалідного поля під час «живої» валідації. */
+.form-field__input--invalid,
+.form-field__textarea--invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--danger) 45%, transparent);
+}
+
+/* Оверлей-панель результату валідації: рівна ширині поля, над ним. */
+.validation-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 4px);
+  z-index: 40;
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.35;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  animation: validation-overlay-in 0.12s ease-out;
+}
+/* Хвостик-стрілка вниз до поля. */
+.validation-overlay::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 12px;
+  border: 5px solid transparent;
+  border-top-color: var(--danger);
+}
+.validation-overlay__msg { display: block; }
+@keyframes validation-overlay-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================================ */
+/* RefField */
+/* ============================================================================ */
+.ref-field { gap: 3px; }
+.ref-field__row {
+  display: flex; align-items: stretch; gap: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  min-height: 24px;
+}
+.ref-field__row:focus-within { border-color: var(--accent-500); }
+.ref-field__value {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+  display: flex; align-items: center;
+  min-height: 22px;
+}
+.ref-field__display { color: var(--text); }
+.ref-field__placeholder { color: var(--text-faint); font-style: italic; }
+.ref-field__loading { color: var(--text-faint); font-size: 11px; }
+.ref-field__btn {
+  border: 0; border-left: 1px solid var(--border);
+  background: var(--surface-2);
+  width: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: 12px; cursor: pointer;
+}
+.ref-field__btn:hover { background: var(--surface-3); color: var(--text); }
+.ref-field__btn--drill { color: var(--accent-500); font-weight: 700; }
+.ref-field__btn--clear { color: var(--danger); }
+.ref-field__info {
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+/* ============================================================================ */
+/* RefPicker */
+/* ============================================================================ */
+.ref-picker { display: flex; flex-direction: column; gap: 8px; }
+.ref-picker__toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+.ref-picker__search {
+  flex: 1;
+  padding: 5px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+}
+.ref-picker__search:focus { outline: 0; border-color: var(--accent-500); }
+.ref-picker__count { font-size: 11px; min-width: 80px; text-align: right; }
+.ref-picker__list {
+  display: flex; flex-direction: column; gap: 1px;
+  max-height: 50vh; overflow-y: auto;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.ref-picker__item {
+  background: var(--surface);
+  padding: 5px 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; cursor: pointer;
+  transition: background .08s;
+}
+.ref-picker__item:hover { background: var(--surface-hover); }
+.ref-picker__item--current {
+  background: color-mix(in srgb, var(--accent-500) 12%, var(--surface));
+}
+.ref-picker__item-main { flex: 1; font-size: 12px; }
+.ref-picker__item-actions { display: flex; gap: 4px; }
+.ref-picker__hint { font-size: 11px; padding: 4px 0; }
+
+/* ============================================================================ */
+/* Window stack — subwindows */
+/* ============================================================================ */
+.subwindow-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.subwindow {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+}
+.subwindow--narrow { max-width: 400px; }
+.subwindow--default { max-width: 600px; }
+.subwindow--wide { max-width: 900px; }
+.subwindow--full { max-width: 95vw; }
+.subwindow__header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #fafbfd, #eef2f8);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="dark"] .subwindow__header {
+  background: linear-gradient(to bottom, var(--surface-2), var(--surface-3));
+}
+.subwindow__title-wrap { display: flex; flex-direction: column; gap: 1px; flex: 1; }
+.subwindow__breadcrumb {
+  font-size: 10px; color: var(--text-faint);
+  display: flex; gap: 3px; align-items: center;
+}
+.subwindow__bc-prev { opacity: .65; }
+.subwindow__bc-cur { color: var(--text-muted); font-weight: 600; }
+.subwindow__bc-sep { color: var(--text-faint); }
+.subwindow__title {
+  margin: 0; font-size: 13px; font-weight: 700; color: var(--text);
+}
+.subwindow__body {
+  padding: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.subwindow__footer {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  display: flex; justify-content: flex-end; gap: 6px;
+}
+
+/* ============================================================================ */
+/* Alerts */
+/* ============================================================================ */
+.alert {
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  border: 1px solid; margin-bottom: 12px;
+  font-size: 12px;
+}
+.alert--error {
+  background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+  border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+  color: var(--danger);
+}
+.alert--success {
+  background: color-mix(in srgb, var(--success) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--success) 40%, transparent);
+  color: var(--success);
+}
+.alert--info {
+  background: color-mix(in srgb, var(--info) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--info) 40%, transparent);
+  color: var(--info);
+}
+
+/* ============================================================================ */
+/* Login page */
+/* ============================================================================ */
+.login-shell {
+  min-height: 100vh; display: grid;
+  grid-template-columns: 1fr 1fr; background: var(--bg);
+}
+.login-shell__aside {
+  position: relative;
+  background:
+          radial-gradient(60% 60% at 25% 30%, color-mix(in srgb, var(--accent-700) 40%, transparent), transparent 70%),
+          radial-gradient(80% 80% at 80% 80%, color-mix(in srgb, var(--accent-500) 20%, transparent), transparent 70%),
+          linear-gradient(135deg, #1a3a78, #0f274f);
+  padding: 36px; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff;
+}
+.login-shell__aside::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+          linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.login-shell__pitch { position: relative; z-index: 1; }
+.login-shell__pitch h2 {
+  margin: 0 0 8px; font-size: 22px; font-weight: 700; line-height: 1.2;
+}
+.login-shell__pitch p {
+  margin: 0; color: rgba(255,255,255,.7); font-size: 13px;
+}
+.login-shell__main {
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.login-card {
+  width: 100%; max-width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+.login-card h1 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+.login-card p { margin: 0 0 16px; color: var(--text-muted); font-size: 12px; }
+
+@media (max-width: 880px) {
+  .login-shell { grid-template-columns: 1fr; }
+  .login-shell__aside { display: none; }
+  .page { padding: 12px; }
+  .form-grid--cols-2 { grid-template-columns: 1fr; }
+}
+
+/* ============================================================================ */
+/* Utilities */
+/* ============================================================================ */
+.hflex { display: flex; align-items: center; gap: 8px; }
+.hflex--start { align-items: flex-start; }
+.vflex { display: flex; flex-direction: column; gap: 8px; }
+.spacer { flex: 1; }
+.muted { color: var(--text-muted); }
+.row-actions { display: flex; gap: 4px; justify-content: flex-end; }
+.tag {
+  display: inline-block; padding: 1px 6px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-pill); font-size: 10px; font-weight: 600;
+  color: var(--text-muted);
+}
+.tag--admin {
+  background: color-mix(in srgb, var(--accent-500) 16%, transparent);
+  border-color: var(--accent-500);
+  color: var(--accent-500);
+}
+.tag--success {
+  background: color-mix(in srgb, var(--success) 16%, transparent);
+  border-color: var(--success);
+  color: var(--success);
+}
+.tag--danger {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.empty-state {
+  text-align: center; padding: 32px 24px;
+  color: var(--text-muted); font-size: 13px;
+}
+
+/* ============================================================================ */
+/* RepairNorms matrix — 1C-style */
+/* ============================================================================ */
+.rn-matrix { font-size: 12px; }
+.rn-cell-edit {
+  display: inline-flex; align-items: center; gap: 4px; justify-content: space-between;
+  width: 100%;
+}
+.rn-cell-edit__val { font-family: "Consolas", monospace; }
+
+/* ============================================================================ */
+/* TypeFlags constructor (1C-like grid: type x permissions) */
+/* ============================================================================ */
+.tf-constructor {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.tf-table th, .tf-table td {
+  font-size: 11px;
+}
+.tf-table input[type=checkbox] {
+  width: 16px; height: 16px; cursor: pointer;
+  accent-color: var(--accent-500);
+}
+/* TypeFlagsMatrix — нова реалізація конструктора прав (issue 6) */
+.tf-matrix {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tf-matrix__table {
+  font-size: 11px;
+}
+.tf-matrix__table th, .tf-matrix__table td {
+  font-size: 11px;
+  padding: 4px 6px;
+}
+.tf-matrix__table input[type=checkbox] {
+  width: 16px; height: 16px; cursor: pointer;
+  accent-color: var(--accent-500);
+}
+.tf-matrix__row--granted td {
+  background: color-mix(in srgb, var(--accent-500) 6%, transparent);
+}
+/* ============================================================================
+ * SpringBootCRM — UI additions (filters, dialogs, toasts)
+ *
+ * Покриває:
+ *     • lv-dialog (тепер використовується тільки ConfirmDialog)
+ *     • toast-stack
+ *     • lv-filter-table, lv-col-list, lv-select, lv-input
+ *     • data-table__msg, icon-btn--small
+ *     • data-table__col-filter-wrap + спінер очікування дебаунса
+ *     • lv-debouncing (статус-індикатор)
+ *     • lv-ref-input (поле вибору ref-значення)
+ *     • ref-picker, ref-picker__footer
+ *     • value-list-picker + vlp-* (modal для in/nin)
+ *     • value-list, value-list__items, value-list__item
+ *     • filter-dialog (тіло filter-вікна в WindowStack)
+ *     • column-settings (тіло column-settings-вікна в WindowStack)
+ * ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+ * Generic dialog (тепер тільки ConfirmDialog: інші мігрували в WindowStack)
+ * ---------------------------------------------------------------------------- */
+.lv-dialog-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 250;                /* поверх subwindow-стеку (100..199) */
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.lv-dialog {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  width: 100%; max-width: 480px;
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.lv-dialog--narrow { max-width: 360px; }
+.lv-dialog--wide   { max-width: 720px; }
+.lv-dialog__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #fafbfd, #eef2f8);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="dark"] .lv-dialog__header {
+  background: linear-gradient(to bottom, var(--surface-2), var(--surface-3));
+}
+.lv-dialog__header h3 {
+  margin: 0; font-size: 13px; font-weight: 700; color: var(--text);
+}
+.lv-dialog__body {
+  padding: 12px;
+  overflow: auto;
+  flex: 1 1 auto;
+}
+.lv-dialog__footer {
+  display: flex; gap: 6px; align-items: center;
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+}
+.lv-dialog__footer .btn { margin-left: 6px; }
+.lv-dialog__footer > .btn:first-of-type { margin-left: 0; }
+
+/* ----------------------------------------------------------------------------
+ * Filter dialog body (відкривається через WindowStack — обгортка subwindow__body)
+ * ---------------------------------------------------------------------------- */
+.filter-dialog {
+  display: flex; flex-direction: column;
+}
+.filter-dialog__add-row {
+  margin-top: 8px;
+}
+.filter-dialog__footer {
+  display: flex; justify-content: flex-end; gap: 6px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ----------------------------------------------------------------------------
+ * Filter table (рядки фільтрів у FilterDialog)
+ * ---------------------------------------------------------------------------- */
+.lv-filter-table {
+  width: 100%; border-collapse: collapse;
+}
+.lv-filter-table th, .lv-filter-table td {
+  text-align: left;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 12px;
+}
+.lv-filter-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+.lv-filter-table tr:last-child td { border-bottom: 0; }
+
+.lv-select, .lv-input {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+}
+.lv-select:focus, .lv-input:focus {
+  outline: 1px solid var(--accent-500);
+  border-color: var(--accent-500);
+}
+
+/* ----------------------------------------------------------------------------
+ * Ref-input (поле вибору ссилкового значення в FilterValueInput)
+ * ---------------------------------------------------------------------------- */
+.lv-ref-input {
+  display: flex; align-items: center; gap: 6px;
+  padding: 2px 4px;
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  min-height: 26px;
+}
+.lv-ref-input__value {
+  flex: 1 1 auto;
+  font-size: 12px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 4px;
+}
+.lv-ref-input .btn { flex: 0 0 auto; }
+
+/* ----------------------------------------------------------------------------
+ * Column-settings dialog (відкривається через WindowStack)
+ * ---------------------------------------------------------------------------- */
+.column-settings {
+  display: flex; flex-direction: column;
+}
+.column-settings__footer {
+  display: flex; gap: 6px; align-items: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Column list — без змін, успадковано з v2 */
+.lv-col-list {
+  list-style: none;
+  margin: 0; padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.lv-col-list__item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.lv-col-list__item:last-child { border-bottom: 0; }
+.lv-col-list__item--hidden { opacity: .55; background: var(--surface-2); }
+.lv-col-list__cb {
+  display: inline-flex; align-items: center; gap: 8px;
+  flex: 1 1 auto;
+  cursor: pointer;
+  font-size: 12px;
+}
+.lv-col-list__cb input[type="checkbox"] { margin: 0; }
+.lv-col-list__move {
+  display: inline-flex; gap: 2px;
+}
+
+/* ----------------------------------------------------------------------------
+ * Reference picker (відкривається через WindowStack для filterType="reference")
+ * ---------------------------------------------------------------------------- */
+.ref-picker {
+  display: flex; flex-direction: column;
+  min-height: 0;
+}
+/* Bug-fix #4: коли тіло субокна містить picker — робимо його flex-колонкою,
+ * щоб picker заповнював доступну висоту модалки, а прокручувалась лише
+ * внутрішня таблиця (а не «оконна» прокрутка всього модала). Скоупимо через
+ * :has(), щоб не зачіпати інші діалоги (редактори, фільтри, налаштування колонок). */
+.subwindow__body:has(> .ref-picker) {
+  display: flex; flex-direction: column;
+}
+.subwindow__body:has(> .ref-picker) > .ref-picker {
+  flex: 1 1 auto;
+}
+.ref-picker .listview {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex; flex-direction: column;
+}
+/* Таблиця picker'а скролиться всередині себе й заповнює простір модалки —
+ * перевизначаємо загальний max-height (calc(100vh - 240px)), розрахований під
+ * повносторінкові списки, який у модалці виштовхував контент за межі 90vh. */
+.ref-picker .listview__table-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+}
+.ref-picker__footer {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ----------------------------------------------------------------------------
+ * Value-list picker (для in/nin) — спеціальне вікно з add/remove/clear
+ * ---------------------------------------------------------------------------- */
+.value-list-picker {
+  display: flex; flex-direction: column;
+}
+.vlp-ref-action {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+  padding: 10px;
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+.vlp-add-row {
+  display: flex; align-items: flex-start; gap: 6px;
+  margin-bottom: 8px;
+}
+.vlp-footer {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.value-list {
+  margin-top: 4px;
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.value-list__items {
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.value-list__item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 12px;
+}
+.value-list__item:last-child { border-bottom: 0; }
+.value-list__item:hover { background: var(--surface-hover); }
+.value-list__index {
+  flex: 0 0 28px;
+  color: var(--text-faint);
+  font-size: 11px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.value-list__display {
+  flex: 1 1 auto;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.value-list__raw {
+  flex: 0 0 auto;
+  font-size: 10px;
+  padding: 1px 6px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+.value-list .empty-state {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ----------------------------------------------------------------------------
+ * Toasts
+ * ---------------------------------------------------------------------------- */
+.toast-stack {
+  position: fixed;
+  bottom: 16px; right: 16px;
+  display: flex; flex-direction: column-reverse; gap: 8px;
+  z-index: 400;                /* поверх усіх модалок */
+  pointer-events: none;        /* самі тости включають pointer-events */
+  max-width: min(380px, calc(100vw - 32px));
+}
+.toast {
+  pointer-events: auto;
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 10px 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  font-size: 12px;
+  animation: toast-in .18s ease-out;
+  min-width: 220px;
+}
+.toast__icon {
+  flex: 0 0 auto;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  width: 18px; text-align: center;
+}
+.toast__msg { flex: 1 1 auto; line-height: 1.4; }
+/* Контейнер тексту + кликабельного посилання (ссилкове представлення об'єкта). */
+.toast__body { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.toast__link {
+  align-self: flex-start;
+  max-width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: var(--accent-500);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.toast__link:hover { color: var(--accent-600, var(--accent-500)); }
+.toast__close {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 0;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 13px;
+}
+.toast__close:hover { color: var(--text); }
+
+.toast--success { border-left: 3px solid var(--success); }
+.toast--success .toast__icon { color: var(--success); }
+.toast--error   { border-left: 3px solid var(--danger); }
+.toast--error   .toast__icon { color: var(--danger); }
+.toast--info    { border-left: 3px solid var(--info); }
+.toast--info    .toast__icon { color: var(--info); }
+.toast--warning { border-left: 3px solid var(--warning); }
+.toast--warning .toast__icon { color: var(--warning); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------------------------
+ * data-table — purelu QoL покращення + спінер очікування debounce
+ * ---------------------------------------------------------------------------- */
+.data-table__msg {
+  text-align: center;
+  padding: 32px;
+  color: var(--text-muted);
+}
+
+/* Бажано виділити кнопки Filter/Columns у toolbar більш помітно */
+.listview__toolbar-right > .btn { white-space: nowrap; }
+
+/* Quick-filter wrap зі спінером очікування дебаунса */
+.data-table__col-filter-wrap {
+  position: relative;
+  display: block;
+}
+.data-table__col-filter-wrap .data-table__col-filter {
+  width: 100%;
+  padding-right: 20px;             /* місце під spinner */
+}
+.data-table__col-filter-wrap.is-pending .data-table__col-filter {
+  background: linear-gradient(
+          to right,
+          var(--surface) 0%,
+          var(--surface) 70%,
+          rgba(245, 158, 11, 0.06) 100%
+  );
+  border-color: rgba(245, 158, 11, 0.45);
+}
+.data-table__col-filter-spinner {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--warning, #f59e0b);
+  animation: lv-debounce-pulse 1s ease-in-out infinite;
+  pointer-events: none;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* Статус-бар: текстовий індикатор debounce */
+.lv-debouncing {
+  color: var(--warning, #f59e0b);
+  font-weight: 600;
+  animation: lv-debounce-pulse 1s ease-in-out infinite;
+}
+
+@keyframes lv-debounce-pulse {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: 1; }
+}
+
+/* ----------------------------------------------------------------------------
+ * Icon-button (для close, move-up/down, тощо)
+ * ---------------------------------------------------------------------------- */
+.icon-btn--small {
+  width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+}
+.icon-btn--small:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+  color: var(--text);
+}
+.icon-btn--small:disabled {
+  opacity: .35; cursor: not-allowed;
+}
+.icon-btn--small:disabled:hover {
+  background: transparent; border-color: transparent;
+}
+
+/* ----------------------------------------------------------------------------
+ * Empty state — використовується в ValueListPicker і ReferencePicker помилках
+ * ---------------------------------------------------------------------------- */
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  margin: 4px 0;
+}
+
+/* ============================================================================
+ * RefAutocompleteInput — inline-typed reference field з dropdown'ом варіантів
+ * ============================================================================
+ * Використовується в:
+ *   • RefField (form input для скалярних посилань — заміна старого read-only span);
+ *   • FilterValueInput (поле значення фільтра для filterType="reference");
+ *   • RefMultiField (як «add»-поле всередині, з excludeIds для відсікання
+ *     вже обраних).
+ *
+ * Структура DOM:
+ *   .ref-ac
+ *     ├── .ref-ac__row
+ *     │     ├── input.ref-ac__input
+ *     │     ├── button.ref-ac__btn.ref-ac__btn--picker   («…»)
+ *     │     ├── button.ref-ac__btn.ref-ac__btn--drill    («→»)
+ *     │     └── button.ref-ac__btn.ref-ac__btn--clear    («✕»)
+ *     └── .ref-ac__dropdown
+ *           ├── ul.ref-ac__list › li.ref-ac__item › (code | display)
+ *           └── .ref-ac__hint   (підказка з лічильником)
+ */
+.ref-ac {
+  position: relative;
+  width: 100%;
+  display: flex; flex-direction: column;
+}
+.ref-ac__row {
+  display: flex; align-items: stretch; gap: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  min-height: 24px;
+}
+.ref-ac__row:focus-within { border-color: var(--accent-500); }
+.ref-ac--disabled .ref-ac__row { opacity: .55; }
+.ref-ac--readonly .ref-ac__row { background: var(--surface-2); }
+
+.ref-ac__input {
+  flex: 1 1 auto; min-width: 0;
+  padding: 4px 8px;
+  font-size: 12px; color: var(--text);
+  background: transparent;
+  border: 0; outline: 0;
+  font-family: inherit;
+}
+.ref-ac__input::placeholder { color: var(--text-faint); font-style: italic; }
+.ref-ac__input:disabled { cursor: not-allowed; color: var(--text-muted); }
+.ref-ac__input[readonly] { cursor: default; }
+
+.ref-ac__btn {
+  flex: 0 0 auto;
+  border: 0; border-left: 1px solid var(--border);
+  background: var(--surface-2);
+  width: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: 12px; cursor: pointer;
+  transition: background .08s, color .08s;
+}
+.ref-ac__btn:hover { background: var(--surface-3); color: var(--text); }
+.ref-ac__btn--picker { font-weight: 700; }
+.ref-ac__btn--drill  { color: var(--accent-500); font-weight: 700; }
+.ref-ac__btn--clear  { color: var(--danger); }
+
+/* -------- dropdown -------- */
+.ref-ac__dropdown {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0; right: 0;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+  max-height: 280px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.ref-ac__msg {
+  padding: 10px 12px;
+  font-size: 12px; color: var(--text-muted);
+  text-align: center;
+}
+.ref-ac__msg--error { color: var(--danger); }
+.ref-ac__msg kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface-2);
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+}
+
+.ref-ac__list {
+  list-style: none; margin: 0; padding: 2px 0;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+.ref-ac__item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  user-select: none;
+}
+.ref-ac__item--active   { background: var(--surface-hover); }
+.ref-ac__item--selected {
+  background: color-mix(in srgb, var(--accent-500) 12%, var(--surface));
+}
+.ref-ac__item--selected.ref-ac__item--active {
+  background: color-mix(in srgb, var(--accent-500) 22%, var(--surface));
+}
+.ref-ac__opt-code {
+  flex: 0 0 auto;
+  min-width: 32px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: right;
+}
+.ref-ac__opt-text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ref-ac__hint {
+  display: flex; align-items: center;
+  padding: 4px 10px;
+  font-size: 10px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.ref-ac__hint .spacer { flex: 1; }
+
+/* ============================================================================
+ * RefMultiField — chips + inline-add для масивів посилань
+ * ============================================================================ */
+.ref-multi { gap: 4px; }
+.ref-multi__chips {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 4px;
+  min-height: 24px;
+}
+.ref-multi__chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 4px 2px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 12px;
+  max-width: 100%;
+}
+.ref-multi__chip-code {
+  padding: 0 5px;
+  background: var(--surface);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.ref-multi__chip-text {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ref-multi__chip-remove {
+  flex: 0 0 auto;
+  width: 18px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 11px;
+}
+.ref-multi__chip-remove:hover {
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+}
+.ref-multi__chip-open {
+  flex: 0 0 auto;
+  width: 18px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 12px;
+}
+.ref-multi__chip-open:hover {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+.ref-multi__empty {
+  padding: 4px 6px;
+  font-size: 11px; font-style: italic;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.ref-multi__add-row {
+  display: flex; align-items: stretch; gap: 6px;
+  margin-top: 2px;
+}
+.ref-multi__add-row > .btn { flex: 0 0 auto; align-self: stretch; }
+
+/* ============================================================================
+   ErrorDialog — центральне модальне вікно помилок (req 4+5)
+   ============================================================================ */
+
+.error-dialog__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;        /* Поверх WindowStack (z-index 100..1000) */
+  animation: fadeIn 0.12s ease-out;
+}
+
+.error-dialog {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3),
+  0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 360px;
+  max-width: 560px;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  animation: errorDialogIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes errorDialogIn {
+  from { transform: translateY(-12px) scale(0.98); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+.error-dialog__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.error-dialog__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.error-dialog__title {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.error-dialog__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+}
+.error-dialog__close:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.error-dialog__body {
+  padding: 14px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.error-dialog__message {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.error-dialog__subtitle {
+  margin: 12px 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.error-dialog__req-list,
+.error-dialog__field-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.error-dialog__req-item,
+.error-dialog__field-item {
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent-500);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.error-dialog__req-item code,
+.error-dialog__field-item code {
+  background: var(--surface-3);
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", monospace;
+}
+
+.error-dialog--access_denied .error-dialog__req-item {
+  border-left-color: var(--warning);
+}
+.error-dialog--validation .error-dialog__field-item {
+  border-left-color: var(--danger);
+}
+
+.error-dialog__hint {
+  margin-top: 10px;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.error-dialog__path {
+  margin-top: 16px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", monospace;
+}
+
+.error-dialog__footer {
+  padding: 12px 18px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ============================================================================
+ * Віртуальний скрол / посторінковий режим / пікер-режим ListView
+ * (chunked-завантаження великих списків). Вимога: pageable «без сторінок».
+ * ========================================================================== */
+
+/* Контейнер віртуального скролу: фіксована висота, повна область прокрутки
+   формується spacer-рядками (top/bottom) у tbody. */
+.listview__table-wrap--virtual {
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+  /* Як і у звичайному wrap: резервуємо місце під вертикальний скрол, щоб його
+     поява не «з'їдала» ширину й не давала горизонтальний скрол. */
+  scrollbar-gutter: stable;
+  /* Вимикаємо scroll anchoring: при довантаженні чанків браузер інакше сам
+     підправляє scrollTop, щоб «утримати» видимий вузол. У віртуальному списку це
+     зсуває задану нами програмно позицію, і onScroll сприйняв би це як рух
+     ползунка → зрив позиції (петля на початку списку). */
+  overflow-anchor: none;
+}
+
+/* Закріплена шапка таблиці (для обох режимів — прокрутка й сторінки, а також
+   звичайних client-списків при overflow). thead «прилипає» до верху скрол-
+   контейнера, тому при проматуванні вниз заголовки колонок лишаються видимими. */
+.listview__table-wrap thead th,
+.listview__table-wrap--virtual thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-1, #fff);
+}
+/* Другий рядок шапки (quick-фільтри) прилипає під першим. */
+.listview__table-wrap thead tr:first-child th {
+  height: 38px;
+  box-sizing: border-box;
+}
+.listview__table-wrap thead tr.data-table__filter-row th {
+  top: 38px;
+  z-index: 1;
+}
+
+/* Shimmer-плейсхолдер для ще не завантажених рядків (рядки «переливаються»). */
+.data-table__row--pending td.lv-shimmer-cell {
+  padding: 6px 10px;
+}
+.lv-shimmer {
+  display: block;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(
+          90deg,
+          var(--surface-2, #eceef1) 25%,
+          var(--surface-3, #f6f7f9) 37%,
+          var(--surface-2, #eceef1) 63%
+  );
+  background-size: 400% 100%;
+  animation: lv-shimmer-slide 1.2s ease-in-out infinite;
+}
+@keyframes lv-shimmer-slide {
+  0%   { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* Перемикач режиму відображення (scroll ↔ pages). */
+.lv-mode-toggle {
+  display: inline-flex;
+  gap: 2px;
+  margin-right: 6px;
+}
+
+/* Пагінація (server + pages). */
+.lv-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 8px 4px;
+}
+.lv-pagination__ellipsis {
+  padding: 0 4px;
+  color: var(--text-muted, #8a8f98);
+}
+/* Поточна сторінка як редагований текстовий контрол. */
+.lv-pagination__goto {
+  margin-left: 8px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.lv-pagination__page-input {
+  width: 4.5em;
+  padding: 2px 6px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid var(--border, #d4d7dd);
+  border-radius: 4px;
+  background: var(--surface-1, #fff);
+  color: var(--text, #1c1e21);
+}
+.lv-pagination__page-input:focus {
+  outline: none;
+  border-color: var(--accent, #3b6cf2);
+  box-shadow: 0 0 0 2px var(--accent-soft, rgba(59, 108, 242, 0.2));
+}
